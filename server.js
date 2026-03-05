@@ -296,7 +296,7 @@ app.get('/api/files', (_req, res) => {
     }
 
     const files = entries
-      .filter((name) => !name.startsWith('.'))
+      .filter((name) => !name.startsWith('.') && name !== 'metadata.json')
       .map((name) => {
         const uploadedAt = getUploadedAtFromName(name);
         const meta = metadata[name] || {};
