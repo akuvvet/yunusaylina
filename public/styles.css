@@ -45,26 +45,39 @@ body {
 .app-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  justify-content: center;
   padding: 20px 24px;
   border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.75));
-  border: 1px solid rgba(148, 163, 184, 0.35);
-  box-shadow: var(--shadow-soft);
+  background: linear-gradient(
+    135deg,
+    rgba(30, 58, 138, 0.25),
+    rgba(49, 46, 129, 0.2),
+    rgba(15, 23, 42, 0.85)
+  );
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.4);
   backdrop-filter: blur(var(--blur));
+  text-align: center;
+}
+
+.app-header > div {
+  max-width: 100%;
 }
 
 .app-header h1 {
-  margin: 0 0 4px;
-  font-size: 1.7rem;
-  letter-spacing: 0.02em;
+  margin: 0 0 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
 }
 
 .app-header p {
   margin: 0;
-  color: var(--text-muted);
-  font-size: 0.98rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-main);
 }
 
 .app-main {
@@ -76,6 +89,45 @@ body {
 @media (max-width: 900px) {
   .app-main {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Smartphone: noch größere Touch-Ziele */
+@media (max-width: 600px) {
+  .app {
+    padding: 20px 12px 32px;
+  }
+
+  .file-drop {
+    min-height: 140px;
+    padding: 28px 20px;
+    border-radius: 24px;
+  }
+
+  .file-drop-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.75rem;
+  }
+
+  .file-drop-title {
+    font-size: 1.15rem;
+  }
+
+  .actions .btn.primary {
+    min-height: 56px;
+    padding: 16px 20px;
+    font-size: 1.1rem;
+    border-radius: 20px;
+  }
+
+  .panel-actions {
+    flex-wrap: wrap;
+  }
+
+  .panel-actions .btn {
+    min-height: 48px;
+    padding: 12px 16px;
   }
 }
 
@@ -114,36 +166,67 @@ body {
   gap: 8px;
 }
 
+/* Großer Button: Dateiauswahl – wirkt wie ein einziger großer Klick-Button */
 .file-drop {
-  margin-top: 4px;
+  margin-top: 8px;
   position: relative;
-  border-radius: var(--radius-md);
-  border: 1px dashed rgba(148, 163, 184, 0.8);
-  background: radial-gradient(circle at top, rgba(59, 130, 246, 0.16), transparent 65%),
-    linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.75));
-  padding: 20px 16px;
+  border-radius: 24px;
+  border: none;
+  background: linear-gradient(
+    180deg,
+    #60a5fa 0%,
+    #3b82f6 30%,
+    #2563eb 70%,
+    #1d4ed8 100%
+  );
+  box-shadow:
+    0 4px 0 #1e40af,
+    0 2px 0 rgba(255, 255, 255, 0.3) inset,
+    0 14px 32px rgba(37, 99, 235, 0.5);
+  padding: 24px 20px;
+  min-height: 120px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   text-align: center;
   cursor: pointer;
   overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.1s ease-out, box-shadow 0.15s ease-out;
 }
 
+.file-drop:active {
+  transform: translateY(3px);
+  box-shadow:
+    0 1px 0 #1e40af,
+    0 1px 0 rgba(255, 255, 255, 0.2) inset,
+    0 8px 20px rgba(37, 99, 235, 0.4);
+}
+
+/* Glanz oben = typischer Button-Look */
 .file-drop::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at top, rgba(129, 140, 248, 0.22), transparent 60%);
-  opacity: 0;
-  transition: opacity 0.18s ease-out;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.15) 25%,
+    transparent 50%
+  );
   pointer-events: none;
 }
 
 .file-drop:hover::before {
-  opacity: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.2) 25%,
+    transparent 50%
+  );
 }
 
 .file-drop input {
@@ -154,32 +237,63 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  border: 1px solid rgba(191, 219, 254, 0.5);
-  background: radial-gradient(circle at 30% 0%, rgba(59, 130, 246, 0.6), rgba(129, 140, 248, 0.2));
-  color: #e5edff;
-  font-size: 1.1rem;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.15) 100%
+  );
+  color: #1e40af;
+  font-size: 1.6rem;
   margin-bottom: 2px;
-  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.7);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
 }
 
 .file-drop-title {
-  font-weight: 500;
-  letter-spacing: 0.01em;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .file-drop-subtitle {
-  font-size: 0.85rem;
-  color: var(--text-muted);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .actions {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   gap: 10px;
-  margin-top: 4px;
+  margin-top: 12px;
+}
+
+.actions .btn.primary {
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 24px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border-radius: 16px;
+  box-shadow:
+    0 4px 0 rgba(67, 56, 202, 0.5),
+    0 1px 0 rgba(255, 255, 255, 0.2) inset,
+    0 10px 24px rgba(79, 70, 229, 0.5);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.actions .btn.primary:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow:
+    0 2px 0 rgba(67, 56, 202, 0.5),
+    0 1px 0 rgba(255, 255, 255, 0.15) inset,
+    0 6px 16px rgba(79, 70, 229, 0.4);
 }
 
 .uploader-row {
@@ -225,19 +339,21 @@ body {
 .btn {
   border: none;
   border-radius: var(--radius-pill);
-  padding: 8px 16px;
-  font-size: 0.9rem;
+  padding: 10px 18px;
+  font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
+  min-height: 44px;
   transition:
     background 0.15s ease-out,
     color 0.15s ease-out,
     box-shadow 0.15s ease-out,
-    transform 0.04s ease-out;
+    transform 0.08s ease-out;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn:active {
