@@ -4,6 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
+const ftp = require('basic-ftp');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -24,6 +25,13 @@ const ACCESS_USERNAME = process.env.ACCESS_USERNAME || 'yunusandaylina@klick-und
 const ACCESS_PASSWORD = process.env.ACCESS_PASSWORD || 'yunusaylina2026';
 const ACCESS_LINK_TOKEN =
   process.env.ACCESS_LINK_TOKEN || 'aanbacsdteafsgmhuimjskaltmsnaon3apXrXsXtXu240v2w6';
+
+// FTP-Konfiguration – ACHTUNG: sensible Daten
+// Für ein öffentliches GitHub-Repo solltest du diese Werte später in Umgebungsvariablen auslagern.
+const FTP_HOST = process.env.FTP_HOST || 'okay.ddnss.org';
+const FTP_USER = process.env.FTP_USER || 'strato-ftp';
+const FTP_PASSWORD = process.env.FTP_PASSWORD || '-ASeee08+';
+const FTP_BASE_DIR = process.env.FTP_BASE_DIR || '/backup/backup/yunusaylina';
 
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
@@ -55,6 +63,29 @@ function getUploadedAtFromName(name) {
   const ts = Number(String(name).split('-')[0]);
   if (!Number.isFinite(ts) || ts <= 0) return null;
   return new Date(ts).toISOString();
+}
+
+async function uploadFileToFtp(file) {
+  const client = new ftp.Client();
+  client.ftp.verbose = false;
+
+  try {
+    await client.access({
+      host: FTP_HOST,
+      user: FTP_USER,
+      password: FTP_PASSWORD,
+      secure: false,
+    });
+
+    await client.ensureDir(FTP_BASE_DIR);
+    await client.cd(FTP_BASE_DIR);
+    await client.uploadFrom(file.path, file.filename);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Fehler beim FTP-Upload', error);
+  } finally {
+    client.close();
+  }
 }
 
 function isAuthenticated(req) {
@@ -260,14 +291,18 @@ function detectType(filename) {
   return 'other';
 }
 
-app.post('/api/upload', upload.array('files', 50), (req, res) => {
+app.post('/api/upload', upload.array('files', 50), async (req, res) => {
   const metadata = loadMetadata();
   const uploader = (req.body && req.body.uploader) || null;
+
+  const uploadTasks = [];
 
   const files = (req.files || []).map((file) => {
     metadata[file.filename] = {
       uploader,
     };
+
+    uploadTasks.push(uploadFileToFtp(file));
 
     return {
       id: file.filename,
@@ -279,6 +314,10 @@ app.post('/api/upload', upload.array('files', 50), (req, res) => {
       uploader,
     };
   });
+
+  if (uploadTasks.length > 0) {
+    await Promise.all(uploadTasks);
+  }
 
   saveMetadata(metadata);
 
