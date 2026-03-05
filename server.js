@@ -23,7 +23,7 @@ const metadataFile = path.join(uploadDir, 'metadata.json');
 const ACCESS_USERNAME = process.env.ACCESS_USERNAME || 'yunusandaylina@klick-und-fertig.de';
 const ACCESS_PASSWORD = process.env.ACCESS_PASSWORD || 'yunusaylina2026';
 const ACCESS_LINK_TOKEN =
-  process.env.ACCESS_LINK_TOKEN || 'DEIN-LANGER-EINMALIGER-LINK-TOKEN-HIER-ÄNDERN';
+  process.env.ACCESS_LINK_TOKEN || 'anastasmumsatsanaXXXX2026';
 
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
