@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Media Upload Galerie</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="app-header">
+        <div>
+          <h1>Media Upload Galerie</h1>
+          <p>Lade Bilder &amp; Videos hoch, sieh Vorschauen und lade ausgewählte Dateien herunter.</p>
+        </div>
+      </header>
+
+      <main class="app-main">
+        <section class="panel upload-panel">
+          <h2>Upload</h2>
+          <p class="hint">Dateien auswählen, Vorschau prüfen und dann hochladen.</p>
+
+          <div class="uploader-row">
+            <label for="uploader-name">Dein Name (optional)</label>
+            <input id="uploader-name" type="text" placeholder="z.&#8201;B. Yunus" />
+          </div>
+
+          <label class="file-drop" id="file-drop">
+            <input id="file-input" type="file" multiple accept="image/*,video/*" />
+            <span class="file-drop-icon">⬆</span>
+            <span class="file-drop-title">Dateien hierher ziehen oder klicken</span>
+            <span class="file-drop-subtitle">Unterstützt Bilder &amp; Videos</span>
+          </label>
+
+          <div class="actions">
+            <button id="upload-button" class="btn primary" disabled>Ausgewählte Dateien hochladen</button>
+            <span id="upload-status" class="status"></span>
+          </div>
+
+          <div id="selected-preview" class="grid preview-grid"></div>
+        </section>
+
+        <section class="panel gallery-panel">
+          <header class="panel-header">
+            <div>
+              <h2>Galerie</h2>
+              <p class="hint">Alle bereits hochgeladenen Dateien.</p>
+            </div>
+            <div class="panel-actions">
+              <button id="refresh-button" class="btn ghost">Aktualisieren</button>
+              <button id="download-selected" class="btn secondary" disabled>Ausgewählte herunterladen</button>
+            </div>
+          </header>
+          <div id="gallery" class="grid gallery-grid"></div>
+          <p id="empty-state" class="empty-state">Noch keine Dateien hochgeladen.</p>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <span>Lokales Demo-Projekt · Dateien bleiben nur auf deinem Rechner.</span>
+      </footer>
+    </div>
+
+    <script src="/main.js"></script>
+  </body>
+</html>
+
